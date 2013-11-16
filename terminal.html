@@ -16,8 +16,11 @@
 				//console.log(data);
 				//console.log(typeof data);
 				if(typeof data != 'string') {
+					if(data.type == 'Buffer') {
+						data=data.data
+					}
 					for(i in data) {
-						console.log(String.fromCharCode(data[i]));
+						//console.log(String.fromCharCode(data[i]));
 						$('#output').append(htmlEncode(String.fromCharCode(data[i])));
 					}
 				} else {
@@ -49,7 +52,6 @@
 				$('#output').click(setFocus);
 				$('#form-cmd').click(setFocus);
 				$('#form-cmd').submit( function(e) {
-					var form = e.currentTarget;
 					var cmd = $('#cmd').val();
 
 					if(cmd == 'clear') {
