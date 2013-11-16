@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			function clear_screen() {
+				$('#output').text('');
+			}
+
+			function htmlEncode(value){
+				return $('<div/>').text(value).html();
+			}
+
+			function stdout(data) {
+				//console.log(data);
+				//console.log(typeof data);
+				if(typeof data != 'string') {
+					for(i in data) {
+						console.log(String.fromCharCode(data[i]));
+						$('#output').append(htmlEncode(String.fromCharCode(data[i])));
+					}
+				} else {
+						$('#output').append(htmlEncode(data));
+				}
+			}
+
+      var sio = io.connect(), socket = sio.socket.of('/sock');
+			socket.on('stdout', function (data) {
+				//console.log(data);
+				stdout(data);
+			});
+			socket.on('stderr', function (data) {
+				//console.log(data);
+				stdout(data);
+			});
+			socket.on('exit', function (data) {
+				//console.log(data);
+				stdout(data);
+				$('#form-cmd').hide();
+			});
+
+			$( document ).ready(function() {
+				setFocus = function(e) {
+					$('#cmd').focus();
+				};
+
+				$('body').click(setFocus);
+				$('#output').click(setFocus);
+				$('#form-cmd').click(setFocus);
+				$('#form-cmd').submit( function(e) {
+					var form = e.currentTarget;
+					var cmd = $('#cmd').val();
+
+					if(cmd == 'clear') {
+						clear_screen();
+					} else {
+						socket.emit('message', cmd);
+					}
+					$('#cmd').val('');
+					e.preventDefault();
+				});
+
+				$('#cmd').keydown(function(e) {
+					if ( e.which == 67 && e.ctrlKey ) {
+						//console.log('ctrl-c');
+						socket.emit('ctrl', 'c');
+						e.preventDefault(); 
+					} 
+					if ( e.which == 68 && e.ctrlKey ) {
+						//console.log('ctrl-d');
+						socket.emit('ctrl', 'd');
+						e.preventDefault(); 
+					}
+					if ( e.keyCode == 9 ) {
+						//console.log('tab');
+						e.preventDefault(); 
+					}
+				});
+			});
+
+		</script>
+    <style type="text/css">
+      body, p, input {
+        font-family: FreeMono, monospace, fixed;
+        font-size: 13px;
+        border: none;
+				color: #ddd;
+				background: #444;
+      }
+      p { white-space: pre; }
+      p, form, input { margin:0; padding:0; }
+      input:focus { outline: none; border: none; }
+			#cmd { cursor: text; width: 90%; }
+    </style>
+  </head>
+  <body>
+    <div><p id="output"></p></div>
+    <form id="form-cmd" autocomplete="off">
+      $ <input id="cmd" />
+    </form>
+  </body>
+</html>
