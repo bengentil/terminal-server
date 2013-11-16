@@ -3,6 +3,8 @@ NodeJs - terminal-server
 
 Serve a shell in a browser, each tab/new connections open a new bash.
 
+See [Screenshots](#shortcuts)
+
 Installation:
 -------------
 - Install nodeJS if needed (0.10+ recommended)
