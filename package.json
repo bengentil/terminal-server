@@ -1,10 +1,21 @@
 {
-  "name": "terminal-server",
-  "version": "0.0.1",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "socket.io": "*"
-  }
+	"name": "terminal-server",
+	"author": "Benjamin Gentil",
+	"version": "0.0.1",
+	"repository" : {
+        "type" : "git",
+        "url" : "https://github.com/bengentil/terminal-server.git"
+    },
+    "licenses" : [
+        {
+            "type" : "MIT",
+            "url" : "https://github.com/bengentil/terminal-server/raw/master/LICENSE"
+        }
+    ],
+	"scripts": {
+		"start": "node server.js"
+	},
+	"dependencies": {
+		"socket.io": "*"
+	}
 }
