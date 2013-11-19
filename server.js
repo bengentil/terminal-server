@@ -1,10 +1,11 @@
 var http  = require('http'),
     url   = require('url'),
     fs    = require('fs'),
-    spawn = require('child_process').spawn;
+    spawn = require('child_process').spawn,
+    sio   = require('socket.io');
 
 function setupServer() {
-	var io = require('socket.io').listen(server);
+	var io = sio.listen(server);
 	var sockets = io.of('/sock');
 
 	// set socket.io to warn level
